@@ -35,7 +35,7 @@ Unittests for the Files Manager Project are still in development.
 
 ## License 🛑
 This project is licensed under the terms of the MIT license.
-> You can check out the full license [here]()
+> You can check out the full license [here](https://github.com/afkzoro/alx-files_manager/blob/main/LICENSE)
 
 ## FAQs ❓
 To reach out to the team for possible questions and answers. You can reach any of us at  👇🏻
