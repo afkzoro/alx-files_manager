@@ -28,4 +28,5 @@ const waitConnection = () => {
     console.log(dbClient.isAlive());
     console.log(await dbClient.nbUsers());
     console.log(await dbClient.nbFiles());
-})();
+})()
+;

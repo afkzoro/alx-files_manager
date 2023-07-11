@@ -4,38 +4,39 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const { DB_HOST = '127.0.0.1', DB_PORT = 27017, DB_DATABASE = 'files_manager' } = process.env;
-const url = `mongodb://${DB_HOST}:${DB_PORT}/${DB_DATABASE}`;
-
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-});
-
-const filesSchema = new mongoose.Schema({
-  userId: { type: String, required: true },
-  name: { type: String, required: true },
-  type: { type: String, required: true },
-  isPublic: { type: Boolean, default: false },
-  parentId: { type: String, default: '0' },
-  localPath: { type: String },
-});
-
 class DBClient {
   constructor() {
-    this.connect();
+    const { DB_HOST = '0.0.0.0', DB_PORT = 27017, DB_DATABASE = 'files_manager' } = process.env;
+    const url = `mongodb://${DB_HOST}:${DB_PORT}/${DB_DATABASE}`;
+
+    this.connect(url);
+
+    const userSchema = new mongoose.Schema({
+      email: {
+        type: String,
+        required: true,
+        unique: true,
+      },
+      password: {
+        type: String,
+        required: true,
+      },
+    });
+
+    const filesSchema = new mongoose.Schema({
+      userId: { type: String, required: true },
+      name: { type: String, required: true },
+      type: { type: String, required: true },
+      isPublic: { type: Boolean, default: false },
+      parentId: { type: String, default: '0' },
+      localPath: { type: String },
+    });
+
     this.users = mongoose.model('User', userSchema);
     this.files = mongoose.model('File', filesSchema);
   }
 
-  async connect() {
+  async connect(url) {
     try {
       await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
       console.log('Connected to MongoDB');
@@ -45,7 +46,7 @@ class DBClient {
     }
   }
 
-  async isAlive() {
+  isAlive() {
     return mongoose.connection.readyState === 1;
   }
 
