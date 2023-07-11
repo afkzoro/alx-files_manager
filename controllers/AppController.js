@@ -1,23 +1,21 @@
-import redisClient from '../utils/redis';
-import dbClient from '../utils/db';
+import RedisClient from '../utils/redis';
+import DBClient from '../utils/db';
 
 class AppController {
-  static async getStatus(req, res) {
-    const redisStatus = await redisClient.isAlive();
-    const dbStatus = await dbClient.isAlive();
-
-    return res.status(200).json({ redis: redisStatus, db: dbStatus });
+  static getStatus(request, response) {
+    const status = {
+      redis: RedisClient.isAlive(),
+      db: DBClient.isAlive(),
+    };
+    return response.status(200).send(status);
   }
 
-  static async getStats(req, res) {
-    try {
-      const userCount = await dbClient.nbUsers();
-      const fileCount = await dbClient.nbFiles();
-
-      return res.status(200).json({ users: userCount, files: fileCount });
-    } catch (error) {
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
+  static async getStats(request, response) {
+    const stats = {
+      users: await DBClient.nbUsers(),
+      files: await DBClient.nbFiles(),
+    };
+    return response.status(200).send(stats);
   }
 }
 
